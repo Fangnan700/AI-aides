@@ -1,0 +1,150 @@
+<template>
+	<view class="container">
+
+		<scroll-view class="scrollview" id="scrollview" scroll-y="true" :scroll-into-view="position">
+			<view class="uni-chatMsgCnt" v-for="(item, index) in msgList">
+				<view class="msg-l">
+					<image src="../../../static/wxlogo.png" style="width: 40px; height: 40px; margin-top: 10px; margin-left: 10px;" v-show="item.from=='ai'"></image>
+					<view class="msgitem" v-show="item.from=='ai'">{{ item.text }}</view>
+				</view>
+				<view class="msg-r">
+					<view class="msgitem" v-show="item.from=='me'">{{ item.text }}</view>
+					<image src="../../../static/me.png" style="width: 40px; height: 40px; margin-top: 10px; margin-right: 10px;" v-show="item.from=='me'"></image>
+				</view>
+				<view :id="'msg'+(msgList.length)"></view>
+			</view>
+		</scroll-view>
+
+		<view class="inputframe" id="inputframe">
+			<input class="input" cursor-spacing="10" type="text" placeholder=" 请输入信息" v-model="send_text"></input>
+			<button class="btn" @click="send">发送</button>
+		</view>
+
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				msgList: [],
+				send_text: "",
+				num: 0,
+				position: ""
+			};
+		},
+		mounted() {
+			this.welcome()
+		},
+		updated() {
+			
+		},
+		methods: {
+			welcome() {
+				let welcome_msg = {
+					from: "ai",
+					text: "欢迎使用AI小助手，这是一个基于GPT-3实现的人工智能助手，可以帮助您解答学习、生活以及工作中的各种问题，希望AI小助手能为您带来便利。"
+				};
+				this.msgList.push(welcome_msg);
+			},
+			send() {
+				if(this.send_text !== "") {
+					const _this = this;
+					let msg = {
+						from: "me",
+						text: this.send_text
+					};
+					this.msgList.push(msg);
+					let send_msg = this.send_text;
+					this.send_text = "";
+					uni.request({
+						// 后端接口地址
+						url: "http://101.43.40.219:8085/send",
+						method: "POST",
+						data: {
+							"content": send_msg
+						},
+						success:function(res){
+							let msg = {
+								from: "ai",
+								text: res.data
+							};
+							_this.msgList.push(msg);
+							setTimeout(()=>{
+							    _this.num = _this.msgList.length
+							    _this.position = 'msg'+ (_this.num)
+							},50)
+						},
+						fail:function(res){
+							console.log(res);
+						}
+					})
+				}
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.scrollview {
+		height: calc(100vh - 150rpx - env(safe-area-inset-bottom));
+	}
+
+	.uni-chatMsgCnt {
+		width: 100%;
+		.msg-l {
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+		}
+		.msg-r {
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+		}
+		.msgitem {
+			width: fit-content;
+			height: fit-content;
+			max-width: 60%;
+			margin: 10px;
+			padding: 10px;
+			border-radius: 10px;
+			background-color: #26B3A0;
+		}
+	}
+	
+	.inputframe {
+		position: fixed; 
+		left: 0; 
+		bottom: 0; 
+		width: 100%; 
+		height: 60px;
+		display: flex; 
+		flex-direction: row; 
+		background-color: mediumaquamarine;
+		
+		.input {
+			background-color: white;
+			flex: 1;
+			height: 40px;
+			bottom: 10px;
+			line-height: 40px;
+			margin-top: 10px;
+			margin-left: 10px;
+			margin-right: 5px;
+			padding-left: 10px;
+			padding-right: 10px;
+			border-radius: 10px;
+		}
+		
+		.btn {
+			height: 40px;
+			margin-top: 10px;
+			margin-right: 10px;
+			border-radius: 10px;
+			background-color: white;
+			text-align: center;
+			font-size: 16px;
+		}
+	}
+</style>
