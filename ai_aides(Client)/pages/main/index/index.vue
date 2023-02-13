@@ -33,11 +33,7 @@
 			};
 		},
 		mounted() {
-			uni.showModal({
-				title: "注意事项",
-				content: "该版本为测试版本，后端接口仍在调整，项目更新请关注GitHub。",
-				showCancel: false
-			})
+			
 		},
 		methods: {
 			onToForm() {
