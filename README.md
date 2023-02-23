@@ -92,7 +92,7 @@ sudo docker run -itd -p <your port>:5000 aides-server
 url: "http://<your host:your port>/chat"
 ```
 
-修改`/ai_aides(Client)/pages/main/admin/admin.vue`
+修改`/ai_aides(Client)/pages/main/login/login.vue`
 
 ```js
 // 后端登录接口地址
