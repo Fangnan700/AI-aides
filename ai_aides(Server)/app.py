@@ -2,33 +2,29 @@ from flask import *
 from revChatGPT.V1 import Chatbot
 from apscheduler.schedulers.background import BackgroundScheduler
 import json
+import uuid
+import time
 
 app = Flask(__name__)
 
-with open('config.json', 'r') as file:
-    config = json.load(file)
-    account = config['account']
-    proxy = config['proxy']
 
-if proxy is not None:
-    chatbot = Chatbot(config={
-        'email': account['email'],
-        'password': account['password'],
-        'proxy': proxy
-    })
-else:
-    chatbot = Chatbot(config={
-        'email': account['email'],
-        'password': account['password']
-    })
+# 机器人列表
+chatbots = {}
+chatbots_times = {}
 
 
-def clear_conversations():
-    chatbot.clear_conversations()
+def clear_outdated_bot():
+    current_time = time.time()
+    for token, create_time in chatbots_times.items():
+        # 清除半小时前创建的机器人
+        if current_time - create_time > 60*30:
+            chatbots.get(token).clear_conversations()
+            chatbots.pop(token)
+            chatbots_times.pop(token)
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=clear_conversations, trigger='interval', seconds=60*60)
+scheduler.add_job(func=clear_outdated_bot, trigger='interval', seconds=60)
 
 
 @app.route('/')
@@ -40,52 +36,53 @@ def index():
     return json.dumps(response)
 
 
-@app.route('/reset', methods=['POST'])
-def login_bot():
-    global chatbot
-    config_data = request.json['config_data']
-    re_email = config_data['email']
-    re_password = config_data['password']
-    re_proxy = config_data['proxy']
+@app.route('/login', methods=['POST'])
+def login():
+    login_data = request.json['login_data']
+    username = login_data['username']
+    password = login_data['password']
+    new_bot = Chatbot(config={
+        'email': username,
+        'password': password
+    })
+
+    # 生成用户token
+    token = str(uuid.uuid4())
+    create_time = time.time()
+
+    chatbots[token] = new_bot
+    chatbots_times[token] = create_time
+
     try:
-        if re_proxy is not None:
-            chatbot = Chatbot(config={
-                'email': re_email,
-                'password': re_password,
-                'proxy': re_proxy
-            })
-        else:
-            chatbot = Chatbot(config={
-                'email': re_email,
-                'password': re_password
-            })
         response = {
             'code': '1',
-            'msg': 'Chatbot is initialized.'
+            'msg': '登录成功',
+            'token': token
         }
         return json.dumps(response)
     except Exception:
         response = {
             'code': '-1',
-            'msg': 'Chatbot initialize fail.'
+            'msg': '登录失败'
         }
         return json.dumps(response)
 
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    global chatbot
-    if chatbot is None:
+    token = request.json['token']
+    if chatbots.get(token) is None:
         response = {
             'code': '0',
-            'msg': 'Chatbot is not initialized.'
+            'msg': '未登录'
         }
         return json.dumps(response)
     else:
         try:
+            _chatbot = chatbots.get(token)
             content = request.json['content']
             text = ''
-            for data in chatbot.ask(content):
+            for data in _chatbot.ask(content):
                 text = data['message']
             response = {
                 'code': '1',

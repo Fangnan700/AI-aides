@@ -34,8 +34,12 @@
 				msgList: [],
 				send_text: "",
 				num: 0,
-				position: ""
+				position: "",
+				token: ""
 			};
+		},
+		onLoad(options) {
+			this.token = options.token;
 		},
 		mounted() {
 			this.welcome()
@@ -79,10 +83,11 @@
 					this.msgList.push(pre_msg);
 					
 					uni.request({
-						// 后端接口地址
+						// 后端发送接口地址
 						url: "http://<your host:your port>/chat",
 						method: "POST",
 						data: {
+							"token": _this.token,
 							"content": send_msg
 						},
 						success: function(res) {

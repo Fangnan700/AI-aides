@@ -6,17 +6,18 @@
     "dependencies": {
         "uview-ui": "^2.0.35"
     },
-    "id": "AI-aides",
-    "name": "AI小助手，让AI回答你的任何问题！",
-    "displayName": "AI小助手",
-    "version": "2.0.0",
-    "description": "AI小助手",
+    "id": "Coder-ChatGPT",
+    "name": "火爆全网的ChatGPT小程序页面模板，让AI回答你的任何问题！ ",
+    "displayName": "火爆全网的ChatGPT小程序页面模板，让AI回答你的任何问题！ ",
+    "version": "1.0.1",
+    "description": "火爆全网的ChatGPT，微信小程序纯页面模板，分享只为交个朋友，vx：18786709420",
     "keywords": [
         "ChatGPT"
     ],
     "dcloudext": {
         "category": [
-            "AI小助手",
+            "uni-app前端模板",
+            "uni-app前端项目模板"
         ]
     }
 }

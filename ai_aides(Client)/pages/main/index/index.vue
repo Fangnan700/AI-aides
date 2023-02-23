@@ -12,12 +12,9 @@
 				<view class="desc">基于Chat-GPT实现的智能小助手</view>
 			</u-transition>
 			<view class="btn-group">
-				<view class="btn" v-on:click="onToForm">
+				<view class="btn" v-on:click="onToLogin">
 					<u-button shape="circle" iconColor="#ffffff" color="#26B3A0" icon="chat" text="开始体验">
 					</u-button>
-				</view>
-				<view class="btn">
-					<u-button shape="circle" color="#26B3A0" :plain="true" icon="lock-fill" text="管理员页面" @click="adminPage"></u-button>
 				</view>
 				<view class="btn">
 					<u-button shape="circle" color="#26B3A0" :plain="true" icon="share" text="项目GitHub地址" @click="gotoGitHub"></u-button>
@@ -43,9 +40,9 @@
 					url: '/pages/main/form/index'
 				})
 			},
-			adminPage() {
+			onToLogin() {
 				uni.navigateTo({
-					url: '/pages/main/admin/admin'
+					url: '/pages/main/login/login'
 				})
 			},
 			gotoGitHub() {

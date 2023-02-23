@@ -24,10 +24,10 @@
 			}
 		}
 	    ,{
-            "path" : "pages/main/admin/admin",
+            "path" : "pages/main/login/login",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "管理员页面",
+                "navigationBarTitleText": "登录ChatGPT",
                 "enablePullDownRefresh": false
             }
             
@@ -35,7 +35,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "ChatGPT专业版",
+		"navigationBarTitleText": "AI小助手",
 		"navigationBarBackgroundColor": "#ffffff",
 		"backgroundColor": "#ffffff"
 	},
