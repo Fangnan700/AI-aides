@@ -45,11 +45,16 @@
 		},
 		methods: {
 			welcome() {
-				let welcome_msg = {
+				let welcome_msg_1 = {
 					from: "ai",
-					text: "欢迎使用AI小助手，这是一个基于GPT-3实现的人工智能助手，可以帮助您解答学习、生活以及工作中的各种问题，希望AI小助手能为您带来便利。"
+					text: "欢迎使用AI小助手~"
 				};
-				this.msgList.push(welcome_msg);
+				let welcome_msg_2 = {
+					from: "ai",
+					text: "这是一个基于Chat-GPT实现的人工智能助手，可以帮助您解答学习、生活以及工作中的各种问题。"
+				};
+				this.msgList.push(welcome_msg_1);
+				this.msgList.push(welcome_msg_2);
 			},
 			send() {
 				if (this.send_text !== "") {
@@ -67,30 +72,40 @@
 						_this.position = 'msg' + (_this.num)
 					}, 50)
 					
+					let pre_msg = {
+						from: "ai",
+						text: "AI小助手正在思考..."
+					};
+					this.msgList.push(pre_msg);
+					
 					uni.request({
 						// 后端接口地址
-						url: "http://101.43.40.219:8085/send",
+						url: "http://<your host:your port>/chat",
 						method: "POST",
 						data: {
 							"content": send_msg
 						},
 						success: function(res) {
+							_this.msgList.pop();
 							let msg = {
 								from: "ai",
-								text: res.data
+								text: res.data.text
 							};
 							_this.msgList.push(msg);
+							plus.device.vibrate(150);
 							setTimeout(() => {
 								_this.num = _this.msgList.length
 								_this.position = 'msg' + (_this.num)
 							}, 50)
 						},
 						fail: function(res) {
+							_this.msgList.pop();
 							let msg = {
 								from: "ai",
-								text: "服务器好像出了点问题，稍后再试试吧"
+								text: "服务器出了点问题，稍后再试试吧~"
 							};
 							_this.msgList.push(msg);
+							plus.device.vibrate(150);
 							setTimeout(() => {
 								_this.num = _this.msgList.length
 								_this.position = 'msg' + (_this.num)

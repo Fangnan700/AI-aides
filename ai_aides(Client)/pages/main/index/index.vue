@@ -9,12 +9,15 @@
 				<view class="title">AI小助手</view>
 			</u-transition>
 			<u-transition :show="true" mode="slide-right">
-				<view class="desc">基于GPT-3实现的智能小助手</view>
+				<view class="desc">基于Chat-GPT实现的智能小助手</view>
 			</u-transition>
 			<view class="btn-group">
 				<view class="btn" v-on:click="onToForm">
-					<u-button shape="circle" iconColor="#ffffff" color="#26B3A0" icon="edit-pen" text="开始体验">
+					<u-button shape="circle" iconColor="#ffffff" color="#26B3A0" icon="chat" text="开始体验">
 					</u-button>
+				</view>
+				<view class="btn">
+					<u-button shape="circle" color="#26B3A0" :plain="true" icon="lock-fill" text="管理员页面" @click="adminPage"></u-button>
 				</view>
 				<view class="btn">
 					<u-button shape="circle" color="#26B3A0" :plain="true" icon="share" text="项目GitHub地址" @click="gotoGitHub"></u-button>
@@ -28,8 +31,7 @@
 	export default {
 		data() {
 			return {
-				show: true,
-				content: "你好"
+				show: true
 			};
 		},
 		mounted() {
@@ -39,6 +41,11 @@
 			onToForm() {
 				uni.navigateTo({
 					url: '/pages/main/form/index'
+				})
+			},
+			adminPage() {
+				uni.navigateTo({
+					url: '/pages/main/admin/admin'
 				})
 			},
 			gotoGitHub() {

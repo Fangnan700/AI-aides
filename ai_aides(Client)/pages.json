@@ -23,7 +23,16 @@
 				"navigationBarTextStyle": "white"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/main/admin/admin",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "管理员页面",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "ChatGPT专业版",
