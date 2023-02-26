@@ -35,11 +35,21 @@
 				send_text: "",
 				num: 0,
 				position: "",
-				token: ""
+				token: "",
+				bot_number: 0
 			};
 		},
 		onLoad(options) {
 			this.token = options.token;
+			setInterval(function() {
+				uni.request({
+					url: "http://chat.api.aliyungpt.com/get_info",
+					success:function(res){
+						let data = JSON.parse(res.data["chatbots"])
+						this.bot_number = Object.keys(data).length / 90;
+					}
+				})
+			}, 3*1000)
 		},
 		mounted() {
 			this.welcome()
@@ -71,20 +81,20 @@
 					let send_msg = this.send_text;
 					this.send_text = "";
 					
-					setTimeout(() => {
-						_this.num = _this.msgList.length
-						_this.position = 'msg' + (_this.num)
-					}, 50)
-					
 					let pre_msg = {
 						from: "ai",
 						text: "AI小助手正在思考..."
 					};
 					this.msgList.push(pre_msg);
 					
+					setTimeout(() => {
+						_this.num = _this.msgList.length
+						_this.position = 'msg' + (_this.num)
+					}, 100)
+					
 					uni.request({
-						// 后端发送接口地址
-						url: "http://<your host:your port>/chat",
+						// 后端接口地址
+						url: "http://chat.api.aliyungpt.com/chat",
 						method: "POST",
 						data: {
 							"token": _this.token,
@@ -101,7 +111,7 @@
 							setTimeout(() => {
 								_this.num = _this.msgList.length
 								_this.position = 'msg' + (_this.num)
-							}, 50)
+							}, 100)
 						},
 						fail: function(res) {
 							_this.msgList.pop();
@@ -114,7 +124,7 @@
 							setTimeout(() => {
 								_this.num = _this.msgList.length
 								_this.position = 'msg' + (_this.num)
-							}, 50)
+							}, 100)
 						}
 					})
 				}

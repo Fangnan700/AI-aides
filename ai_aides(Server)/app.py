@@ -36,6 +36,14 @@ def index():
     return json.dumps(response)
 
 
+@app.route('/get_info')
+def get_bots_info():
+    response = {
+        'bots': json.dumps(str(chatbots))
+    }
+    return json.dumps(response)
+    
+
 @app.route('/login', methods=['POST'])
 def login():
     login_data = request.json['login_data']

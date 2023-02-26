@@ -8,7 +8,8 @@
 			<u-input class="admin_input" v-model="ch_password" type="password" placeholder="请输入ChatGPT密码" />
 			<view class="success" v-show="success">登录成功</view>
 			<view class="wrong" v-show="wrong">登录失败</view>
-			<u-button id="admin_btn" shape="circle" @click="login">登录ChatGPT</u-button>
+			<u-button class="admin_btn" shape="circle" @click="login">登录ChatGPT</u-button>
+			<u-button class="reset_btn" shape="circle" color="#26B3A0" :plain="true" @click="reset">重置</u-button>
 		</view>
 	</view>
 </template>
@@ -24,15 +25,33 @@
 				ch_token: ""
 			}
 		},
+		onLoad() {
+			this.ch_email = uni.getStorageSync('ch_email');
+			this.ch_password = uni.getStorageSync('ch_password');
+			this.success = false;
+			this.wrong = false;
+		},
 		methods: {
+			confirm() {
+				if (this.username === "yvling" && this.password === "@a123456") {
+					this.isAdmin = true
+				} else {
+					this.wrong = true
+				}
+			},
+			reset() {
+				this.ch_email = "";
+				this.ch_password = "";
+				uni.clearStorageSync();
+			},
 			login() {
 				const _this = this;
 				uni.showLoading({
 					title: "正在登录..."
 				})
 				uni.request({
-					// 后端登录接口地址
-					url: "http://<your host:your port>/login",
+					// 后端接口地址
+					url: "http://chat.api.aliyungpt.com/login",
 					method: "POST",
 					data: {
 						"login_data": {
@@ -41,12 +60,15 @@
 						}
 					},
 					success: function(res) {
-						console.log(res);
 						uni.hideLoading();
 						if (res.data["code"] === "1") {
 							_this.ch_token = res.data['token'];
 							_this.success = true;
+							uni.setStorageSync('ch_email', _this.ch_email);
+							uni.setStorageSync('ch_password', _this.ch_password);
 							setTimeout(()=>{
+								_this.success = false;
+								_this.wrong = false;
 								uni.navigateTo({
 									url: "/pages/main/form/index?token=" + _this.ch_token
 								}, 2)
@@ -57,7 +79,7 @@
 					},
 					fail: function(res) {
 						uni.hideLoading();
-						_this.wrong = true
+						_this.wrong = true;
 					}
 				})
 			}
@@ -101,12 +123,17 @@
 				color: #26B3A0;
 			}
 
-			#admin_btn {
+			.admin_btn {
 				width: 100%;
 				height: 45px;
 				margin-top: 10px;
 				background-color: #26B3A0;
 				color: #ffffff;
+				font-size: 16px;
+			}
+			
+			.reset_btn {
+				margin-top: 10px;
 				font-size: 16px;
 			}
 		}
