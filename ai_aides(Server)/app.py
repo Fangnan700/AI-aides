@@ -1,4 +1,5 @@
 from flask import *
+from flask_cors import CORS
 from revChatGPT.V1 import Chatbot
 from apscheduler.schedulers.background import BackgroundScheduler
 import json
@@ -6,7 +7,7 @@ import uuid
 import time
 
 app = Flask(__name__)
-
+CORS(app, supports_credentials=True)
 
 # 机器人列表
 chatbots = {}

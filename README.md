@@ -9,6 +9,8 @@
 
 更新：
 
+V2.2.2新增前端设置服务器地址功能；优化UI，适配H5端。
+
 V2.2.0修改后端接口；新增查询在线机器人数量的接口；新增本地缓存，避免每次使用都需要手动输入帐号密码。
 
 V2.1.0支持使用ChatGPT的帐号密码登录，可以部署到服务器后供多人使用。
@@ -89,23 +91,20 @@ sudo docker run -itd -p <your port>:5000 aides-server
 
 ## App端：
 
-拉取本仓库到本地（需要Nodejs环境，HBuilder X编辑器）
+- 拉取本仓库到本地（需要Nodejs环境，HBuilder X编辑器）
 
-修改`/ai_aides(Client)/pages/main/form/index.vue`
+- 在服务器设置中配置后端服务器地址。
+- 通过 HBuilder X 云打包apk，安装到手机即可。
 
-```js
-// 后端发送接口地址
-url: "http://<your host:your port>/chat"
-```
+**注意：部署H5端前，建议将**
 
-修改`/ai_aides(Client)/pages/main/login/login.vue`
+**`/ai_aides(Client)/pages/main/login/login.vue`和`/ai_aides(Client)/pages/main/form/index.vue`**
 
-```js
-// 后端登录接口地址
-url: "http://<your host:your port>/login"
-```
+**中的接口进行更改，并将**
 
-通过 HBuilder X 云打包apk，安装到手机即可。
+**`/ai_aides(Client)/pages/main/index/index.vue`**
+
+**中的`服务器设置`按钮关闭，避免手动设置服务器地址。**
 
 
 
@@ -113,13 +112,37 @@ url: "http://<your host:your port>/login"
 
 ## 测试截图：
 
-![3F99A75DA387B21A4CA28D7D6A814657.jpgA7A8D1D8746AFBC9AB87272DBCCC7509](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/3F99A75DA387B21A4CA28D7D6A814657.jpgA7A8D1D8746AFBC9AB87272DBCCC7509.jpg)
+### App端
+
+![4.jpgCF84A65723D1F60705A304301C188138](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/4.jpgCF84A65723D1F60705A304301C188138.jpg)
+
+![4.jpg4CE37E195003AC37ED73776E8AD19BB6](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/4.jpg4CE37E195003AC37ED73776E8AD19BB6.jpg)
+
+![4.jpgDD388427B495A6C012978E54BDFB718C](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/4.jpgDD388427B495A6C012978E54BDFB718C.jpg)
+
+![4.jpgB65EB95506D04A0B0E0A95AD74DDDBFD](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/4.jpgB65EB95506D04A0B0E0A95AD74DDDBFD.jpg)
 
 
 
-![3F99A75DA387B21A4CA28D7D6A814657.jpg85DBFEC212C93F9CEB94759E7CAC54B3](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/3F99A75DA387B21A4CA28D7D6A814657.jpg85DBFEC212C93F9CEB94759E7CAC54B3.jpg)
+### H5端
+
+![image-20230227165724151](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/image-20230227165724151.png)
+
+![image-20230227165736094](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/image-20230227165736094.png)
 
 
 
-![3F99A75DA387B21A4CA28D7D6A814657.jpgDE2C0A9875D8A0B1523A09BCD94C8F87](https://yvling-typora-image-1257337367.cos.ap-nanjing.myqcloud.com/typora/3F99A75DA387B21A4CA28D7D6A814657.jpgDE2C0A9875D8A0B1523A09BCD94C8F87.jpg)
+
+
+
+
+
+
+
+
+
+
+
+
+
 

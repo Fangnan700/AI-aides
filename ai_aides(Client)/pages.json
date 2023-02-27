@@ -32,6 +32,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/main/admin/admin",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "服务器设置",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

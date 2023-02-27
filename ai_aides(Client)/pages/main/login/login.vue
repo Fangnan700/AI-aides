@@ -3,6 +3,9 @@
 		<view class="logo">
 			<u--image src="/static/wxlogo.png" shape="circle" width="200rpx" height="200rpx"></u--image>
 		</view>
+		<u-transition :show="true" mode="slide-right">
+			<view class="desc">基于Chat-GPT实现的智能小助手</view>
+		</u-transition>
 		<view class="confirm">
 			<u-input class="admin_input" v-model="ch_email" type="text" placeholder="请输入ChatGPT账号" />
 			<u-input class="admin_input" v-model="ch_password" type="password" placeholder="请输入ChatGPT密码" />
@@ -22,23 +25,18 @@
 				wrong: false,
 				ch_email: "",
 				ch_password: "",
-				ch_token: ""
+				ch_token: "",
+				server_host: ""
 			}
 		},
 		onLoad() {
 			this.ch_email = uni.getStorageSync('ch_email');
 			this.ch_password = uni.getStorageSync('ch_password');
+			this.server_host = uni.getStorageSync('server_host');
 			this.success = false;
 			this.wrong = false;
 		},
 		methods: {
-			confirm() {
-				if (this.username === "yvling" && this.password === "@a123456") {
-					this.isAdmin = true
-				} else {
-					this.wrong = true
-				}
-			},
 			reset() {
 				this.ch_email = "";
 				this.ch_password = "";
@@ -51,7 +49,7 @@
 				})
 				uni.request({
 					// 后端接口地址
-					url: "http://chat.api.aliyungpt.com/login",
+					url: _this.server_host + "/login",
 					method: "POST",
 					data: {
 						"login_data": {
@@ -66,7 +64,7 @@
 							_this.success = true;
 							uni.setStorageSync('ch_email', _this.ch_email);
 							uni.setStorageSync('ch_password', _this.ch_password);
-							setTimeout(()=>{
+							setTimeout(() => {
 								_this.success = false;
 								_this.wrong = false;
 								uni.navigateTo({
@@ -91,14 +89,22 @@
 	.content {
 		.logo {
 			width: 100px;
-			margin-top: 80px;
+			margin-top: 100px;
 			margin-left: auto;
 			margin-right: auto;
 		}
+		
+		.desc {
+			width: fit-content;
+			margin-top: 10px;
+			margin-left: auto;
+			margin-right: auto;
+			color: #696969;
+		}
 
 		.confirm {
-			width: 80%;
-			margin-top: 50px;
+			width: 600rpx;
+			margin-top: 20px;
 			margin-left: auto;
 			margin-right: auto;
 
@@ -131,7 +137,7 @@
 				color: #ffffff;
 				font-size: 16px;
 			}
-			
+
 			.reset_btn {
 				margin-top: 10px;
 				font-size: 16px;

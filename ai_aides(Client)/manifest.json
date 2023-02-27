@@ -2,8 +2,8 @@
     "name" : "AI小助手",
     "appid" : "__UNI__5DE6B0A",
     "description" : "基于GPT-3实现的智能小助手",
-    "versionName" : "2.2.0",
-    "versionCode" : 220,
+    "versionName" : "2.2.1",
+    "versionCode" : 221,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -96,5 +96,12 @@
     "uniStatistics" : {
         "enable" : false
     },
-    "vueVersion" : "2"
+    "vueVersion" : "2",
+    "h5" : {
+        "title" : "AI-aides",
+        "router" : {
+            "mode" : "hash",
+            "base" : "./"
+        }
+    }
 }

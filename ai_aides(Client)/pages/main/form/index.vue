@@ -16,11 +16,13 @@
 						v-show="item.from=='me'"></image>
 				</view>
 			</view>
+			
 			<view :id="'msg'+(msgList.length)"></view>
+			
 		</scroll-view>
 		
 		<view class="inputframe" id="inputframe">
-			<input class="input" cursor-spacing="10" type="text" placeholder=" 请输入信息" v-model="send_text"></input>
+			<input class="input" cursor-spacing="10" type="text" placeholder=" 请输入信息" v-model="send_text" @keydown.enter="send"></input>
 			<button class="btn" @click="send">发送</button>
 		</view>
 
@@ -36,20 +38,24 @@
 				num: 0,
 				position: "",
 				token: "",
+				server_host: "",
 				bot_number: 0
 			};
 		},
 		onLoad(options) {
+			const _this = this;
 			this.token = options.token;
-			setInterval(function() {
-				uni.request({
-					url: "http://chat.api.aliyungpt.com/get_info",
-					success:function(res){
-						let data = JSON.parse(res.data["chatbots"])
-						this.bot_number = Object.keys(data).length / 90;
-					}
-				})
-			}, 3*1000)
+			this.server_host = uni.getStorageSync('server_host');
+			//轮询在线机器人数量
+			//setInterval(function() {
+			//	uni.request({
+			//		url: _this.server_host + "/get_info",
+			//		success:function(res){
+			//			let data = JSON.parse(res.data["chatbots"])
+			//			this.bot_number = Object.keys(data).length / 90;
+			//		}
+			//	})
+			//}, 3*1000)
 		},
 		mounted() {
 			this.welcome()
@@ -94,7 +100,7 @@
 					
 					uni.request({
 						// 后端接口地址
-						url: "http://chat.api.aliyungpt.com/chat",
+						url: _this.server_host + "/chat",
 						method: "POST",
 						data: {
 							"token": _this.token,
@@ -163,6 +169,7 @@
 			background-color: #F0F8FF;
 			word-break: break-all;
 			white-space: pre-line;
+			font-size: 14px;
 		}
 
 		.msgitem-me {
@@ -175,6 +182,7 @@
 			background-color: #26B3A0;
 			word-break: break-all;
 			white-space: pre-line;
+			font-size: 14px;
 		}
 	}
 

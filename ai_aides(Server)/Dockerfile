@@ -2,7 +2,7 @@
 FROM python:3.10-alpine
 
 # Install Flask and other required packages
-RUN pip install flask revChatGPT Flask-APScheduler -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install flask flask_cors revChatGPT Flask-APScheduler --upgrade
 
 # Copy the application code to the container
 COPY . /app

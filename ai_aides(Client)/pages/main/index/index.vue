@@ -17,6 +17,9 @@
 					</u-button>
 				</view>
 				<view class="btn">
+					<u-button shape="circle" color="#26B3A0" :plain="true" icon="reload" text="服务器设置" @click="onToAdmin"></u-button>
+				</view>
+				<view class="btn">
 					<u-button shape="circle" color="#26B3A0" :plain="true" icon="share" text="项目GitHub地址" @click="gotoGitHub"></u-button>
 				</view>
 			</view>
@@ -45,6 +48,11 @@
 					url: '/pages/main/login/login'
 				})
 			},
+			onToAdmin() {
+				uni.navigateTo({
+					url: '/pages/main/admin/admin'
+				})
+			},
 			gotoGitHub() {
 				plus.runtime.openURL('https://github.com/Fangnan700/AI-aides')
 			}
@@ -58,7 +66,8 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		margin-top: 50%;
+		margin-top: 400rpx;
+		overflow-y: hidden;
 
 		.title {
 			font-size: 38rpx;
@@ -73,7 +82,7 @@
 		}
 
 		.btn-group {
-			width: 80%;
+			width: 600rpx;
 
 			.btn {
 				margin: 30rpx 0rpx;

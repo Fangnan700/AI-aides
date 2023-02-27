@@ -17,5 +17,6 @@
 	@import "uview-ui/index.scss";
 	page{
 		font-size: 28rpx;
+		overflow-y: hidden;
 	}
 </style>
