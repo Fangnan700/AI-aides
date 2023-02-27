@@ -50,19 +50,19 @@ def login():
     login_data = request.json['login_data']
     username = login_data['username']
     password = login_data['password']
-    new_bot = Chatbot(config={
-        'email': username,
-        'password': password
-    })
-
-    # 生成用户token
-    token = str(uuid.uuid4())
-    create_time = time.time()
-
-    chatbots[token] = new_bot
-    chatbots_times[token] = create_time
 
     try:
+        new_bot = Chatbot(config={
+            'email': username,
+            'password': password
+        })
+
+        # 生成用户token
+        token = str(uuid.uuid4())
+        create_time = time.time()
+
+        chatbots[token] = new_bot
+        chatbots_times[token] = create_time
         response = {
             'code': '1',
             'msg': '登录成功',
