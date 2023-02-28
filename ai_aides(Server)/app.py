@@ -1,31 +1,21 @@
 from flask import *
 from flask_cors import CORS
 from revChatGPT.V1 import Chatbot
-from apscheduler.schedulers.background import BackgroundScheduler
+import redis
 import json
 import uuid
-import time
+import pickle
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-# 机器人列表
+# Redis连接（如果连接失败，请将这里的localhost更改为宿主机中docker0对应的ip）
+redis_pool = redis.ConnectionPool(host='localhost', port='6379', decode_responses=False)
+redis_p = redis.Redis(host='localhost', port=6379, decode_responses=False)
+
+
 chatbots = {}
 chatbots_times = {}
-
-
-def clear_outdated_bot():
-    current_time = time.time()
-    for token, create_time in chatbots_times.items():
-        # 清除半小时前创建的机器人
-        if current_time - create_time > 60*30:
-            chatbots.get(token).clear_conversations()
-            chatbots.pop(token)
-            chatbots_times.pop(token)
-
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=clear_outdated_bot, trigger='interval', seconds=60)
 
 
 @app.route('/')
@@ -37,16 +27,25 @@ def index():
     return json.dumps(response)
 
 
-@app.route('/get_info')
-def get_bots_info():
-    response = {
-        'bots': json.dumps(str(chatbots))
-    }
-    return json.dumps(response)
+# @app.route('/get_info')
+# def get_bots_info():
+#     count = 0
+#     keys = redis_p.keys()
+#     for key in keys:
+#         if redis_p.get(key) is None:
+#             redis_p.delete(key)
+#         else:
+#             count += 1
+#     response = {
+#         'bots_number': count
+#     }
+#     return json.dumps(response)
     
 
 @app.route('/login', methods=['POST'])
 def login():
+    global chatbots
+    global chatbots_times
     login_data = request.json['login_data']
     username = login_data['username']
     password = login_data['password']
@@ -59,10 +58,7 @@ def login():
 
         # 生成用户token
         token = str(uuid.uuid4())
-        create_time = time.time()
-
-        chatbots[token] = new_bot
-        chatbots_times[token] = create_time
+        redis_p.set(token, pickle.dumps(new_bot), 60 * 30)
         response = {
             'code': '1',
             'msg': '登录成功',
@@ -79,8 +75,11 @@ def login():
 
 @app.route('/chat', methods=['POST'])
 def chat():
+    global chatbots
+    global chatbots_times
     token = request.json['token']
-    if chatbots.get(token) is None:
+    bot_str = redis_p.get(token)
+    if bot_str is None:
         response = {
             'code': '0',
             'msg': '未登录'
@@ -88,7 +87,7 @@ def chat():
         return json.dumps(response)
     else:
         try:
-            _chatbot = chatbots.get(token)
+            _chatbot = pickle.loads(bot_str)
             content = request.json['content']
             text = ''
             for data in _chatbot.ask(content):
@@ -105,8 +104,6 @@ def chat():
             }
             return json.dumps(response)
 
-
-scheduler.start()
 
 if __name__ == '__main__':
     app.run()

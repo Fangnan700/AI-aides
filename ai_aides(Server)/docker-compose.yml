@@ -1,0 +1,15 @@
+version: "1"
+services:
+  web:
+    build: .
+    command: gunicorn -c gunicorn.conf app:app
+    volumes:
+      - .:/app
+    ports:
+      - "80:5000"
+    depends_on:
+      - redis
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"

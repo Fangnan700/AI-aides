@@ -1,15 +1,14 @@
-# Use a Python base image
-FROM python:3.10-alpine
+FROM python:3.10
 
-# Install Flask and other required packages
-RUN pip install flask flask_cors revChatGPT Flask-APScheduler --upgrade
-
-# Copy the application code to the container
-COPY . /app
-
-# Set the working directory to the application code
 WORKDIR /app
 
-# Start the Flask application
-CMD ["flask", "run", "--host=0.0.0.0"]
+COPY requirements.txt /app/
+
+RUN pip install --upgrade --no-cache-dir -r requirements.txt
+
+COPY . /app
+
+EXPOSE 5000
+
+CMD ["gunicorn", "-c", "gunicorn.conf", "app:app"]
 

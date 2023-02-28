@@ -1,0 +1,6 @@
+Flask>=2.2.3
+Flask-Cors>=3.0.10
+gevent>=22.10.2
+gunicorn>=20.1.0
+redis>=4.5.1
+revChatGPT>=2.3.10

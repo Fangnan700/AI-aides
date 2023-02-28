@@ -43,19 +43,17 @@
 			};
 		},
 		onLoad(options) {
-			const _this = this;
 			this.token = options.token;
 			this.server_host = uni.getStorageSync('server_host');
-			//轮询在线机器人数量
-			//setInterval(function() {
-			//	uni.request({
-			//		url: _this.server_host + "/get_info",
-			//		success:function(res){
-			//			let data = JSON.parse(res.data["chatbots"])
-			//			this.bot_number = Object.keys(data).length / 90;
-			//		}
-			//	})
-			//}, 3*1000)
+			// setInterval(function() {
+			// 	uni.request({
+			// 		url: "http://chat.api.aliyungpt.com/get_info",
+			// 		success:function(res){
+			// 			let data = JSON.parse(res.data["chatbots"])
+			// 			this.bot_number = Object.keys(data).length / 90;
+			// 		}
+			// 	})
+			// }, 3*1000)
 		},
 		mounted() {
 			this.welcome()
@@ -108,16 +106,29 @@
 						},
 						success: function(res) {
 							_this.msgList.pop();
-							let msg = {
-								from: "ai",
-								text: res.data.text
-							};
-							_this.msgList.push(msg);
-							plus.device.vibrate(150);
-							setTimeout(() => {
-								_this.num = _this.msgList.length
-								_this.position = 'msg' + (_this.num)
-							}, 100)
+							if(res.data['code'] === '1') {
+								let msg = {
+									from: "ai",
+									text: res.data.text
+								};
+								_this.msgList.push(msg);
+								plus.device.vibrate(150);
+								setTimeout(() => {
+									_this.num = _this.msgList.length
+									_this.position = 'msg' + (_this.num)
+								}, 100)
+							} else {
+								let msg = {
+									from: "ai",
+									text: "未登录，请登陆后重试"
+								};
+								_this.msgList.push(msg);
+								plus.device.vibrate(150);
+								setTimeout(() => {
+									_this.num = _this.msgList.length
+									_this.position = 'msg' + (_this.num)
+								}, 100)
+							}
 						},
 						fail: function(res) {
 							_this.msgList.pop();
@@ -169,7 +180,7 @@
 			background-color: #F0F8FF;
 			word-break: break-all;
 			white-space: pre-line;
-			font-size: 14px;
+			font-size: 12px;
 		}
 
 		.msgitem-me {
@@ -182,7 +193,7 @@
 			background-color: #26B3A0;
 			word-break: break-all;
 			white-space: pre-line;
-			font-size: 14px;
+			font-size: 12px;
 		}
 	}
 

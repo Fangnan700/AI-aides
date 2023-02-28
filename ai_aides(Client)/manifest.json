@@ -2,8 +2,8 @@
     "name" : "AI小助手",
     "appid" : "__UNI__5DE6B0A",
     "description" : "基于GPT-3实现的智能小助手",
-    "versionName" : "2.2.1",
-    "versionCode" : 221,
+    "versionName" : "2.2.2",
+    "versionCode" : 222,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
