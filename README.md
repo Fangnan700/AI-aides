@@ -156,6 +156,20 @@ errorlog = './log/gunicorn_error.log'
 loglevel = 'warning'
 ```
 
+**注意！！！**
+
+如果运行时报错：访问Redis服务被拒绝，请按以下步骤修改`app.py`
+
+1. 在服务器上运行`ifconfig docker0 | grep "inet " | awk '{ print $2 }`查看`docker0`的IP
+2. 将`app.py`中的redis连接配置修改为docker0对应的IP
+
+```python
+redis_pool = redis.ConnectionPool(host='<your docker0's IP>', port='6379', decode_responses=False)
+redis_p = redis.Redis(host='<your docker0's IP>', port=6379, decode_responses=False)
+```
+
+
+
 
 
 **构建镜像**
