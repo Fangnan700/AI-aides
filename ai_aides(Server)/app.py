@@ -55,6 +55,8 @@ def login():
             'email': username,
             'password': password
         })
+        
+        new_bot.clear_conversations()
 
         # 生成用户token
         token = str(uuid.uuid4())
