@@ -50,7 +50,7 @@
                                 t.num = t.msgList.length, t.position = "msg" + t.num
                             }), 100), uni.request({
                             	// 这里的接口根据自己的服务器来修改
-                                url: "http://chat.api.aliyungpt.com/chat",
+                                url: "<your server's host and port>/chat",
                                 method: "POST",
                                 data: {
                                     token: t.token,
@@ -63,17 +63,11 @@
                                             from: "ai",
                                             text: i.data.text
                                         };
-                                        t.msgList.push(e), plus.device.vibrate(150), setTimeout((function() {
-                                            t.num = t.msgList.length, t.position = "msg" + t.num
-                                        }), 100)
                                     } else {
                                         var e = {
                                             from: "ai",
                                             text: "未登录，请登录后重试"
                                         };
-                                        t.msgList.push(e), plus.device.vibrate(150), setTimeout((function() {
-                                            t.num = t.msgList.length, t.position = "msg" + t.num
-                                        }), 100)
                                     }
                                     
                                 },
@@ -82,7 +76,7 @@
                                     t.msgList.push({
                                         from: "ai",
                                         text: "服务器出了点问题，稍后再试试吧~"
-                                    }), plus.device.vibrate(150), setTimeout((function() {
+                                    }), setTimeout((function() {
                                         t.num = t.msgList.length, t.position = "msg" + t.num
                                     }), 100)
                                 }

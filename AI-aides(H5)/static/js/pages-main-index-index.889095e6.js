@@ -72,7 +72,7 @@
                         })
                     },
                     gotoGitHub: function() {
-                        plus.runtime.openURL("https://github.com/Fangnan700/AI-aides")
+                        window.location.replace("https://github.com/Fangnan700/AI-aides")
                     }
                 }
             };
