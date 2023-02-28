@@ -50,7 +50,7 @@
                                 t.num = t.msgList.length, t.position = "msg" + t.num
                             }), 100), uni.request({
                             	// 这里的接口根据自己的服务器来修改
-                                url: "<your server's host and port>/chat",
+                                url: "https://chat.api.aliyungpt.com/chat",
                                 method: "POST",
                                 data: {
                                     token: t.token,
@@ -63,11 +63,17 @@
                                             from: "ai",
                                             text: i.data.text
                                         };
+                                        t.msgList.push(e), setTimeout((function() {
+                                            t.num = t.msgList.length, t.position = "msg" + t.num
+                                        }), 100)
                                     } else {
                                         var e = {
                                             from: "ai",
                                             text: "未登录，请登录后重试"
                                         };
+                                        t.msgList.push(e), setTimeout((function() {
+                                            t.num = t.msgList.length, t.position = "msg" + t.num
+                                        }), 100)
                                     }
                                     
                                 },
