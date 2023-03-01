@@ -66,10 +66,18 @@
                                         t.msgList.push(e), setTimeout((function() {
                                             t.num = t.msgList.length, t.position = "msg" + t.num
                                         }), 100)
-                                    } else {
+                                    } else if(i.data.code === "0") {
                                         var e = {
                                             from: "ai",
                                             text: "未登录，请登录后重试"
+                                        };
+                                        t.msgList.push(e), setTimeout((function() {
+                                            t.num = t.msgList.length, t.position = "msg" + t.num
+                                        }), 100)
+                                    } else {
+                                        var e = {
+                                            from: "ai",
+                                            text: "服务器走神啦～"
                                         };
                                         t.msgList.push(e), setTimeout((function() {
                                             t.num = t.msgList.length, t.position = "msg" + t.num

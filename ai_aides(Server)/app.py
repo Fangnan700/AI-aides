@@ -10,8 +10,8 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 # Redis连接（如果连接失败，请将这里的localhost更改为宿主机中docker0对应的ip）
-redis_pool = redis.ConnectionPool(host='localhost', port='6379', decode_responses=False)
-redis_p = redis.Redis(host='localhost', port=6379, decode_responses=False)
+redis_pool = redis.ConnectionPool(host='127.0.0.1', port='6379', decode_responses=False)
+redis_p = redis.Redis(host='127.0.0.1', port=6379, decode_responses=False)
 
 
 chatbots = {}
@@ -53,9 +53,10 @@ def login():
     try:
         new_bot = Chatbot(config={
             'email': username,
-            'password': password
+            'password': password,
+            'proxy': '127.0.0.1:7890'
         })
-        
+
         new_bot.clear_conversations()
 
         # 生成用户token
@@ -75,6 +76,21 @@ def login():
         return json.dumps(response)
 
 
+# 以流返回
+# def generate(bot, _content):
+#     _start = False
+#     try:
+#         for data in bot.ask(_content):
+#             _tmp = str(data['message'])
+#             if _start and _tmp != '':
+#                 print(_tmp)
+#                 yield _tmp
+#             if _tmp == _content:
+#                 _start = True
+#     except Exception:
+#         yield '服务器开小差啦～'
+
+
 @app.route('/chat', methods=['POST'])
 def chat():
     global chatbots
@@ -88,23 +104,32 @@ def chat():
         }
         return json.dumps(response)
     else:
-        try:
-            _chatbot = pickle.loads(bot_str)
-            content = request.json['content']
-            text = ''
-            for data in _chatbot.ask(content):
-                text = data['message']
-            response = {
-                'code': '1',
-                'text': text
-            }
-            return json.dumps(response)
-        except Exception:
-            response = {
-                'code': '-1',
-                'text': '服务器出了点问题，稍后再试试吧～'
-            }
-            return json.dumps(response)
+        _chatbot = pickle.loads(bot_str)
+        content = request.json['content']
+
+        # 以流返回
+        # return Response(stream_with_context(generate(_chatbot, content)))
+
+        # 一次性返回
+        try_times = 0
+        while try_times < 3:
+            try:
+                text = ''
+                for data in _chatbot.ask(content):
+                    text = data['message']
+                response = {
+                    'code': '1',
+                    'text': text
+                }
+                return json.dumps(response)
+            except Exception:
+                print('异常，正在重试')
+                try_times += 1
+        response = {
+            'code': '-1',
+            'text': '服务器出了点问题，稍后再试试吧～'
+        }
+        return json.dumps(response)
 
 
 if __name__ == '__main__':
