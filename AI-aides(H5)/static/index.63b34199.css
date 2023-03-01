@@ -174,7 +174,7 @@ uni-main {
 }
 
 uni-top-window+uni-content {
-    height: calc(100vh - var(--top-window-height))
+    height: calc(90vh - var(--top-window-height))
 }
 
 uni-left-window {
@@ -3152,10 +3152,13 @@ uni-scroll-view[hidden] {
 .uni-scroll-view {
     position: relative;
     -webkit-overflow-scrolling: touch;
-    max-height: inherit
+    /* max-height: inherit */
 }
 
-.uni-scroll-view,
+.uni-scroll-view {
+    height: 98%;
+}
+
 .uni-scroll-view-content {
     width: 100%;
     height: 100%

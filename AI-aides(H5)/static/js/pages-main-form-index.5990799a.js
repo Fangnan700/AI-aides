@@ -17,7 +17,11 @@
                     }
                 },
                 onLoad: function(t) {
-                    this.token = t.token
+                    this.token = t.token;
+                    if(location.href.indexOf("#")==-1){
+                        location.href=location.href+"#";
+                        location.reload();
+                    }
                 },
                 mounted: function() {
                     this.welcome()
@@ -89,7 +93,7 @@
                                     t.msgList.pop();
                                     t.msgList.push({
                                         from: "ai",
-                                        text: "服务器出了点问题，稍后再试试吧~"
+                                        text: "服务器走神啦～"
                                     }), setTimeout((function() {
                                         t.num = t.msgList.length, t.position = "msg" + t.num
                                     }), 100)

@@ -348,7 +348,7 @@
                             title: "正在登录..."
                         }), uni.request({
                             // 这里的接口根据自己的服务器来修改
-                            url: "<your server's host and port>/login",
+                            url: "https://chat.api.aliyungpt.com/login",
                             method: "POST",
                             data: {
                                 login_data: {
